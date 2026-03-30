@@ -21,4 +21,24 @@ export class UserRepository implements IUserRepository{
 
         return new User(user.name , user.email , user.password , user._id.toString())
     }
+
+    async findAll(): Promise<User[]> {
+
+        let users = await UserModel.find()
+        users.map(u => {
+            return new User(u.name , u.email , u.password , u._id.toString())
+        })
+        return users
+    }
+
+    async findById(id : string): Promise<User | null> {
+        
+        let user = await UserModel.findById(id)
+
+        if(!user){
+            return null
+        }
+
+        return new User(user.name , user.email , user.password , user._id.toString())
+    }
 }

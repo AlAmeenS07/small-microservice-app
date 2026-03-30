@@ -1,12 +1,12 @@
 import { User } from "../../domain/entities/user.entity";
-import { IBcryptPassword } from "../../domain/interfaces/Ipassword";
+import { IPasswordService } from "../../domain/interfaces/Ipassword";
 import { IUserRepository } from "../../domain/interfaces/Iuser.repository"
 import { USER_ALREADY_EXIST } from "../../utils/constatns";
 
 export class UserRegister{
     constructor(
         private _userRepo : IUserRepository,
-        private _passwordHash : IBcryptPassword
+        private _passwordHash : IPasswordService
     ){}
 
     async execute(name : string , email : string , password : string) : Promise<User>{

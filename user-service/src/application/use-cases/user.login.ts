@@ -1,4 +1,4 @@
-import { IBcryptPassword } from "../../domain/interfaces/Ipassword";
+import { IPasswordService } from "../../domain/interfaces/Ipassword";
 import { IUserRepository } from "../../domain/interfaces/Iuser.repository";
 import { JwtTokenService } from "../../infrastructure/services/jwt.service";
 import { INVALID_CREDENTIALS, USER_NOT_FOUND } from "../../utils/constatns";
@@ -7,7 +7,7 @@ import { INVALID_CREDENTIALS, USER_NOT_FOUND } from "../../utils/constatns";
 export class UserLogin{
     constructor(
         private _userRepo : IUserRepository,
-        private _passwordCheck : IBcryptPassword,
+        private _passwordCheck : IPasswordService,
         private _jwtService : JwtTokenService
     ){}
 
