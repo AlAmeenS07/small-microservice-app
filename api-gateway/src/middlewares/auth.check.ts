@@ -6,8 +6,6 @@ import jwt, { JwtPayload } from "jsonwebtoken"
 export function authCheck(req: Request, res: Response, next: NextFunction) {
     try {
 
-        console.log("new " , req.cookies)
-
         const token = req.cookies?.token
 
         if (!token) {
@@ -26,7 +24,7 @@ export function authCheck(req: Request, res: Response, next: NextFunction) {
             })
         }
 
-        (req as any).user = decoded
+        (req as any).userId = decoded.userId
 
         next()
 
