@@ -81,8 +81,6 @@ export class UserController {
     async getAllUsers(req: Request, res: Response) {
         try {
 
-            console.log((req as any).user)
-
             let users = await getAllUsers.execute()
 
             res.status(SUCCESS).json({

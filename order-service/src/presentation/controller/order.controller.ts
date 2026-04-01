@@ -4,6 +4,7 @@ import { OrderCreate } from "../../application/use-cases/order.create";
 import { OrderRepository } from "../../infrastructure/repository/order.repository";
 import { UserDataService } from "../../infrastructure/services/user.service";
 import { OrderById } from "../../application/use-cases/order.by.id";
+import { AllOrdersOfUser } from "../../application/use-cases/orders.of.user";
 
 
 const orderRepo = new OrderRepository()
@@ -11,6 +12,7 @@ const extUserService = new UserDataService()
 
 const orderCreate = new OrderCreate(orderRepo, extUserService)
 const orderById = new OrderById(orderRepo)
+const ordersByUserId = new AllOrdersOfUser(orderRepo)
 
 export class OrderController {
 
@@ -52,17 +54,42 @@ export class OrderController {
 
             let order = await orderById.execute(Number(orderId))
 
-            if(!order){
+            if (!order) {
                 return res.status(NOT_FOUND).json({
-                    success : false,
-                    message : ORDER_NOT_FOUND_WITH_ID
+                    success: false,
+                    message: ORDER_NOT_FOUND_WITH_ID
                 })
             }
 
             res.status(SUCCESS).json({
+                success: true,
+                message: ORDER_FETCHED_SUCCESSFULLY,
+                data: order
+            })
+
+        } catch (error: any) {
+            res.status(SERVER_ERROR).json({
+                success: false,
+                message: error.message
+            })
+        }
+    }
+
+    async allOrdersOfUser(req: Request, res: Response) {
+        try {
+
+            let userId = req.headers["x-user-id"] as string
+
+            if(!userId){
+                throw new Error(USER_NOT_FOUND);
+            }
+
+            let orders = await ordersByUserId.execute(userId)
+
+            res.status(SUCCESS).json({
                 success : true,
                 message : ORDER_FETCHED_SUCCESSFULLY,
-                data : order
+                data : orders
             })
 
         } catch (error : any) {

@@ -27,4 +27,17 @@ export class OrderRepository implements IOrderRepository{
 
         return new Order(order.userId , order.amount , order.status as OrderStatus, order.createdAt , order.updatedAt , order.id)
     }   
+
+    async findOrdersByUserId(userId: string): Promise<Order[]> {
+        
+        let orders = await prisma.order.findMany({
+            where : { userId }
+        })
+
+        let allOrders = orders.map(o => {
+            return new Order(o.userId , o.amount , o.status as OrderStatus , o.createdAt , o.updatedAt , o.id )
+        })
+
+        return allOrders
+    }
 }
