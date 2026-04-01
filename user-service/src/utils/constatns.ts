@@ -9,6 +9,7 @@ export const INVALID_EMAIL : string = "Invalid email !"
 export const FETCHED_ALL_USERS : string = "Fetched all users"
 export const USER_NOT_FOUND_WITH_ID : string = "User not found with id !"
 export const USER_FETCHED_SUCCESSFULLY : string = "User fetched successfully"
+export const USER_LOGOUT_SUCCESSFULLY : string = "User logout successfully"
 
 
 export const CREATED : number = 201

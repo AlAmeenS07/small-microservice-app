@@ -1,3 +1,4 @@
+import { User } from "../../domain/entities/user.entity";
 import { IPasswordService } from "../../domain/interfaces/Ipassword";
 import { IUserRepository } from "../../domain/interfaces/Iuser.repository";
 import { JwtTokenService } from "../../infrastructure/services/jwt.service";
@@ -11,7 +12,7 @@ export class UserLogin{
         private _jwtService : JwtTokenService
     ){}
 
-    async execute(email : string , password : string) : Promise<string>{
+    async execute(email : string , password : string) : Promise<{token : string , user : User}>{
 
         const user = await this._userRepo.findByEmail(email)
 
@@ -28,6 +29,9 @@ export class UserLogin{
 
         const token = this._jwtService.signToken(user.id as string)
 
-        return token
+        return {
+            token, 
+            user
+        }
     }
 }

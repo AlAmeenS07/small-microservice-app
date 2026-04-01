@@ -31,10 +31,10 @@ export class OrderController {
                 throw new Error(USER_NOT_FOUND);
             }
 
-            let order = await orderCreate.execute(userId, amount)
+            let order = await orderCreate.execute(userId, Number(amount))
 
             res.status(CREATED).json({
-                succcess: true,
+                success: true,
                 message: ORDER_CREATED_SUCCESSFULLY,
                 data: order
             })

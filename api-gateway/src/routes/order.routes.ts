@@ -11,8 +11,6 @@ router.use("/",
         target: "http://localhost:5002",
         changeOrigin: true,
 
-
-
         on: {
             proxyReq: (proxyReq: any, req: any) => {
                 if (req.userId) {
