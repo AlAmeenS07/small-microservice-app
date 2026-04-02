@@ -10,6 +10,10 @@ export const FETCHED_ALL_USERS : string = "Fetched all users"
 export const USER_NOT_FOUND_WITH_ID : string = "User not found with id !"
 export const USER_FETCHED_SUCCESSFULLY : string = "User fetched successfully"
 export const USER_LOGOUT_SUCCESSFULLY : string = "User logout successfully"
+export const NAME_MUST_BE_THREE_LETTERS : string = "Name must be 3 letters !"
+export const THREE : number = 3
+export const SIX : number = 6
+export const PASSWORD_MUST_BE_SIX_LETTERS : string = "Password must be 6 letters"
 
 
 export const CREATED : number = 201

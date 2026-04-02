@@ -10,6 +10,7 @@ function Register() {
   const [name, setName] = useState<string>("")
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
+  const [error , setError] = useState<string>("")
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -17,13 +18,7 @@ function Register() {
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault()
 
-    console.log({
-      name,
-      email,
-      password
-    })
-
-    let res = await userRegister(name , email , password , dispatch)
+    let res = await userRegister(name , email , password , setError , dispatch)
 
     if(res == true){
         navigate("/login")
@@ -33,6 +28,9 @@ function Register() {
 
   return (
     <AuthCard title="Register">
+
+      {error && <p className="text-md pb-4 text-center text-red-500">{error}</p>}
+
       <form onSubmit={handleSubmit} className="space-y-4">
         
         <Input

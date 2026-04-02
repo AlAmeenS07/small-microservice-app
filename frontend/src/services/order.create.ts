@@ -23,7 +23,7 @@ async function orderCreate(amount : number , dispatch : AppDispatch) {
         
     } catch (error : any) {
         console.log(error)
-        toast.error(error.response.data.message)
+        toast.error(error?.response?.data?.message || "Something wrong !")
     }
     finally{
         dispatch(loadingEnd())

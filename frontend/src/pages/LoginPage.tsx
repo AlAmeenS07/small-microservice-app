@@ -4,24 +4,21 @@ import Button from "../components/Button"
 import AuthCard from "../components/AuthCard"
 import { Link, useNavigate } from "react-router-dom"
 import userLogin from "../services/user.login"
-import { useDispatch, useSelector } from "react-redux"
-import type { RootState } from "../store/store"
+import { useDispatch } from "react-redux"
 
 function Login() {
 
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
+  const [error , setError] = useState<string>("")
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const user = useSelector((state : RootState)=> state.user)
-
-
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault()
 
-    let res = await userLogin(email , password , dispatch)
+    let res = await userLogin(email , password , setError , dispatch)
 
     if(res == true){
         navigate("/")
@@ -30,6 +27,9 @@ function Login() {
 
   return (
     <AuthCard title="Login">
+
+      {error && <p className="text-md pb-4 text-center text-red-500">{error}</p>}
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           type="email"
