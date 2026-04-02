@@ -13,9 +13,9 @@ router.use("/",
 
         on: {
             proxyReq: (proxyReq: any, req: any) => {
-                if (req.userId) {
+                if (req.userId && req.requestId) {
                     proxyReq.setHeader("x-user-id", req.userId)
-                    proxyReq.user = req.userId
+                    proxyReq.setHeader("x-request-id", req.requestId)                
                 }
             }
         }

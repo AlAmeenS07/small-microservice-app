@@ -5,6 +5,7 @@ import { OrderRepository } from "../../infrastructure/repository/order.repositor
 import { UserDataService } from "../../infrastructure/services/user.service";
 import { OrderById } from "../../application/use-cases/order.by.id";
 import { AllOrdersOfUser } from "../../application/use-cases/orders.of.user";
+import logger from "../../config/logger";
 
 
 const orderRepo = new OrderRepository()
@@ -40,6 +41,13 @@ export class OrderController {
             })
 
         } catch (error: any) {
+
+            logger.error({
+                service: "order-service",
+                requestId: req.headers["x-request-id"],
+                message: error.message,
+            })
+
             res.status(SERVER_ERROR).json({
                 success: false,
                 message: error.message
@@ -68,6 +76,13 @@ export class OrderController {
             })
 
         } catch (error: any) {
+
+            logger.error({
+                service: "order-service",
+                requestId: req.headers["x-request-id"],
+                message: error.message,
+            })
+
             res.status(SERVER_ERROR).json({
                 success: false,
                 message: error.message
@@ -80,19 +95,26 @@ export class OrderController {
 
             let userId = req.headers["x-user-id"] as string
 
-            if(!userId){
+            if (!userId) {
                 throw new Error(USER_NOT_FOUND);
             }
 
             let orders = await ordersByUserId.execute(userId)
 
             res.status(SUCCESS).json({
-                success : true,
-                message : ORDER_FETCHED_SUCCESSFULLY,
-                data : orders
+                success: true,
+                message: ORDER_FETCHED_SUCCESSFULLY,
+                data: orders
             })
 
-        } catch (error : any) {
+        } catch (error: any) {
+
+            logger.error({
+                service: "order-service",
+                requestId: req.headers["x-request-id"],
+                message: error.message,
+            })
+
             res.status(SERVER_ERROR).json({
                 success: false,
                 message: error.message

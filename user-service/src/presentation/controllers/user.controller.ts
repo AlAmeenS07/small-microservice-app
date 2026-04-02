@@ -7,6 +7,7 @@ import { UserLogin } from "../../application/use-cases/user.login";
 import { COOKIE_NAME, CREATED, FETCHED_ALL_USERS, INVALID_EMAIL, MISSING_FIELDS, NOT_FOUND, SERVER_ERROR, SUCCESS, USER_FETCHED_SUCCESSFULLY, USER_LOGIN_SUCCESSFULLY, USER_LOGOUT_SUCCESSFULLY, USER_NOT_FOUND_WITH_ID, USER_REGISTERED_SUCCESSFULLY } from "../../utils/constatns";
 import { AllUsers } from "../../application/use-cases/all.users";
 import { GetUserById } from "../../application/use-cases/get.user";
+import logger from "../../config/logger";
 
 
 const userRepo = new UserRepository()
@@ -22,6 +23,9 @@ const getUserById = new GetUserById(userRepo)
 export class UserController {
 
     async register(req: Request, res: Response) {
+
+        const requestId = req.headers["x-request-id"]
+
         try {
 
             const { name, email, password } = req.body
@@ -43,6 +47,13 @@ export class UserController {
             })
 
         } catch (error: any) {
+
+            logger.error({
+                service: "user-service",
+                requestId,
+                message: error.message,
+            })
+
             res.status(SERVER_ERROR).json({
                 success: false,
                 message: error.message
@@ -51,7 +62,10 @@ export class UserController {
     }
 
     async login(req: Request, res: Response) {
-        try {
+
+        const requestId = req.headers["x-request-id"]
+
+        try {            
 
             const { email, password } = req.body
 
@@ -72,6 +86,13 @@ export class UserController {
             })
 
         } catch (error: any) {
+
+            logger.error({
+                service: "user-service",
+                requestId,
+                message: error.message,
+            })
+
             res.status(SERVER_ERROR).json({
                 success: false,
                 message: error.message
@@ -80,6 +101,9 @@ export class UserController {
     }
 
     async logout(req: Request, res: Response) {
+
+        const requestId = req.headers["x-request-id"]
+
         try {
 
             res.clearCookie(COOKIE_NAME, {
@@ -96,6 +120,13 @@ export class UserController {
             })
 
         } catch (error: any) {
+        
+            logger.error({
+                service: "user-service",
+                requestId,
+                message: error.message,
+            })
+
             res.status(SERVER_ERROR).json({
                 success: false,
                 message: error.message
@@ -151,6 +182,9 @@ export class UserController {
     }
 
     async getMyData(req: Request, res: Response) {
+
+        const requestId = req.headers["x-request-id"]
+
         try {
 
             let userId = req.headers["x-user-id"] as string
@@ -175,6 +209,13 @@ export class UserController {
             })
 
         } catch (error: any) {
+
+            logger.error({
+                service: "user-service",
+                requestId,
+                message: error.message,
+            })
+
             res.status(SERVER_ERROR).json({
                 success: false,
                 message: error.message

@@ -21,7 +21,8 @@ async function userLogin(email : string , password : string , dispatch : AppDisp
         toast.error("Something error !")
         
     } catch (error : any) {
-        toast.error(error?.response?.data?.message)
+        console.log("error" , error)
+        toast.error(error?.message)
     }
     finally{
         dispatch(loadingEnd())

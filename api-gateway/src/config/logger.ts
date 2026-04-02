@@ -1,3 +1,4 @@
+
 import winston from "winston"
 
 const logger = winston.createLogger({
@@ -9,7 +10,7 @@ const logger = winston.createLogger({
   ),
 
   transports: [
-
+    
     new winston.transports.File({
       filename: "logs/app.log",
     }),

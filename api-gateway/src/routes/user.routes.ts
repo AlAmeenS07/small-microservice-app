@@ -10,6 +10,16 @@ router.use("/auth",
     createProxyMiddleware({
         target: "http://localhost:5001",
         changeOrigin: true,
+
+        on: {
+            proxyReq: (proxyReq: any, req: any) => {
+                if (req.requestId) {
+                    proxyReq.setHeader("x-request-id", req.requestId)
+                }
+            }
+        }
+
+
     })
 )
 
@@ -21,8 +31,9 @@ router.use("/user",
 
         on: {
             proxyReq: (proxyReq: any, req: any) => {
-                if (req.userId) {
+                if (req.userId && req.requestId) {
                     proxyReq.setHeader("x-user-id", req.userId)
+                    proxyReq.setHeader("x-request-id", req.requestId)
                 }
             }
         }
