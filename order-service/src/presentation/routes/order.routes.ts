@@ -17,8 +17,8 @@ const ordersByUserId = new AllOrdersOfUser(orderRepo)
 
 const orderController = new OrderController(orderById , orderCreate , ordersByUserId)
 
-router.post("/" , orderController.createOrder)
-router.get("/:id" , orderController.getOrderById)
-router.get("/" , orderController.allOrdersOfUser)
+router.post("/" , (req , res) => orderController.createOrder(req , res))
+router.get("/:id" , (req , res) => orderController.getOrderById(req , res))
+router.get("/" , (req , res) => orderController.allOrdersOfUser(req , res))
 
 export default router

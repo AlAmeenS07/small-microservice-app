@@ -22,11 +22,11 @@ const getAllUsers = new AllUsers(userRepo)
 const controller = new UserController(loginUser , userRegister , getUserById , getAllUsers);
 
 router.get("/me" , (req , res) => controller.getMyData(req , res))
-router.post("/register", controller.register);
+router.post("/register", (req , res) => controller.register(req , res));
 router.post("/login", (req , res) => controller.login(req , res));
-router.get("/" , controller.getAllUsers);
-router.get("/:id" , controller.getUser);
-router.post("/logout" , controller.logout);
+router.get("/" , (req , res) => controller.getAllUsers(req , res));
+router.get("/:id" , (req , res) => controller.getUser(req , res));
+router.post("/logout" , (req , res) => controller.logout(req , res));
 
 
 export default router;
