@@ -21,9 +21,9 @@ const getAllUsers = new AllUsers(userRepo)
 
 const controller = new UserController(loginUser , userRegister , getUserById , getAllUsers);
 
-router.get("/me" , controller.getMyData)
+router.get("/me" , (req , res) => controller.getMyData(req , res))
 router.post("/register", controller.register);
-router.post("/login", controller.login);
+router.post("/login", (req , res) => controller.login(req , res));
 router.get("/" , controller.getAllUsers);
 router.get("/:id" , controller.getUser);
 router.post("/logout" , controller.logout);
