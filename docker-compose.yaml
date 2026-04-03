@@ -1,0 +1,54 @@
+version: "3"
+
+services:
+
+  frontend:
+    image: alameens07/small-ms-frontent
+    ports:
+      - "3000:80"
+    depends_on:
+      - api-gateway
+
+  api-gateway:
+    image: alameens07/small-ms-api-gateway
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./api-gateway/.env
+    depends_on:
+      - user-service
+      - order-service
+
+  user-service:
+    image: alameens07/small-ms-user-service
+    env_file:
+      - ./user-service/.env
+    depends_on:
+      - mongo
+
+  order-service:
+    image: alameens07/small-ms-order-service
+    env_file:
+      - ./order-service/.env
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/order-service
+    depends_on:
+      - postgres
+
+  mongo:
+    image: mongo:6
+    volumes:
+      - mongo-data:/data/db
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: order-service
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  mongo-data:
+  postgres-data:

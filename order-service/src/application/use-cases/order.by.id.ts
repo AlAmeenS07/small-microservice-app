@@ -1,8 +1,11 @@
 import { Order } from "../../domain/entities/order.entity";
 import { IOrderRepository } from "../../domain/interface/Iorder.repository";
 
+export interface IOrderById{
+    execute(orderId : number) : Promise<Order | null>
+}
 
-export class OrderById{
+export class OrderById implements IOrderById{
     constructor(
         private _orderRepo : IOrderRepository  
     ){}

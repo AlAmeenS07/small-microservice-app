@@ -5,7 +5,7 @@ export class UserDataService{
     
     async getUserById(userId : string) : Promise<{ name : string , email : string} | null>{
 
-        let user = await axios.get(`http://localhost:5001/api/v1/user/${userId}`)
+        let user = await axios.get(`http://user-service:5001/api/v1/user/${userId}`)
 
         user = user.data
 

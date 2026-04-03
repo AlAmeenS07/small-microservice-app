@@ -8,7 +8,7 @@ const router = Router()
 
 router.use("/auth",
     createProxyMiddleware({
-        target: "http://localhost:5001",
+        target: "http://user-service:5001",
         changeOrigin: true,
 
         on: {
@@ -26,7 +26,7 @@ router.use("/auth",
 router.use("/user",
     authCheck,
     createProxyMiddleware({
-        target: "http://localhost:5001",
+        target: "http://user-service:5001",
         changeOrigin: true,
 
         on: {

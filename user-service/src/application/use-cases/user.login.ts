@@ -4,8 +4,12 @@ import { IUserRepository } from "../../domain/interfaces/Iuser.repository";
 import { JwtTokenService } from "../../infrastructure/services/jwt.service";
 import { INVALID_CREDENTIALS, USER_NOT_FOUND } from "../../utils/constatns";
 
+export interface IUserLogin{
+    execute(email : string , password : string) : Promise<{token : string , user : User}>
+}
 
-export class UserLogin{
+
+export class UserLogin implements IUserLogin{
     constructor(
         private _userRepo : IUserRepository,
         private _passwordCheck : IPasswordService,

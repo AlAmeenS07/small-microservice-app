@@ -1,26 +1,21 @@
 import { Request, Response } from "express";
-import { UserRepository } from "../../infrastructure/repositories/user.repository";
-import { UserRegister } from "../../application/use-cases/user.register";
-import { BcryptPasswordService } from "../../infrastructure/services/bcypt.password";
-import { JwtTokenService } from "../../infrastructure/services/jwt.service";
-import { UserLogin } from "../../application/use-cases/user.login";
+import { IUserRegister } from "../../application/use-cases/user.register";
+import { IUserLogin } from "../../application/use-cases/user.login";
 import { COOKIE_NAME, CREATED, FETCHED_ALL_USERS, INVALID_EMAIL, MISSING_FIELDS, NAME_MUST_BE_THREE_LETTERS, NOT_FOUND, PASSWORD_MUST_BE_SIX_LETTERS, SERVER_ERROR, SIX, SUCCESS, THREE, USER_FETCHED_SUCCESSFULLY, USER_LOGIN_SUCCESSFULLY, USER_LOGOUT_SUCCESSFULLY, USER_NOT_FOUND_WITH_ID, USER_REGISTERED_SUCCESSFULLY } from "../../utils/constatns";
-import { AllUsers } from "../../application/use-cases/all.users";
-import { GetUserById } from "../../application/use-cases/get.user";
+import { IAllUsers } from "../../application/use-cases/all.users";
+import { IGetUserById } from "../../application/use-cases/get.user";
 import logger from "../../config/logger";
 
 
-const userRepo = new UserRepository()
-const bcryptService = new BcryptPasswordService()
-const jwtService = new JwtTokenService()
-
-const userRegister = new UserRegister(userRepo, bcryptService)
-const userLogin = new UserLogin(userRepo, bcryptService, jwtService)
-const getAllUsers = new AllUsers(userRepo)
-const getUserById = new GetUserById(userRepo)
-
 
 export class UserController {
+
+    constructor(
+        private _userLogin : IUserLogin,
+        private _userRegister : IUserRegister,
+        private _userById : IGetUserById,
+        private _allUsers : IAllUsers
+    ){}
 
     async register(req: Request, res: Response) {
 
@@ -47,7 +42,7 @@ export class UserController {
                 throw new Error(PASSWORD_MUST_BE_SIX_LETTERS);
             }
 
-            const user = await userRegister.execute(name, email, password)
+            const user = await this._userRegister.execute(name, email, password)
 
             res.status(CREATED).json({
                 success: true,
@@ -86,7 +81,7 @@ export class UserController {
                 throw new Error(INVALID_EMAIL);
             }
 
-            const { token, user } = await userLogin.execute(email, password)
+            const { token, user } = await this._userLogin.execute(email, password)
 
             res.cookie(COOKIE_NAME, token, {
                 httpOnly: true,
@@ -154,7 +149,7 @@ export class UserController {
     async getAllUsers(req: Request, res: Response) {
         try {
 
-            let users = await getAllUsers.execute()
+            let users = await this._allUsers.execute()
 
             res.status(SUCCESS).json({
                 success: true,
@@ -175,7 +170,7 @@ export class UserController {
 
             let { id } = req.params
 
-            let user = await getUserById.execute(id as string)
+            let user = await this._userById.execute(id as string)
 
             if (!user) {
                 return res.status(NOT_FOUND).json({
@@ -210,7 +205,7 @@ export class UserController {
                 throw new Error(USER_NOT_FOUND_WITH_ID);
             }
 
-            let user = await getUserById.execute(userId as string)
+            let user = await this._userById.execute(userId as string)
 
             if (!user) {
                 return res.status(NOT_FOUND).json({

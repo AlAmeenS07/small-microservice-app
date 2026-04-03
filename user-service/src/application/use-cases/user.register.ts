@@ -3,7 +3,11 @@ import { IPasswordService } from "../../domain/interfaces/Ipassword";
 import { IUserRepository } from "../../domain/interfaces/Iuser.repository"
 import { USER_ALREADY_EXIST } from "../../utils/constatns";
 
-export class UserRegister{
+export interface IUserRegister{
+    execute(name : string , email : string , password : string) : Promise<User>
+}
+
+export class UserRegister implements IUserRegister{
     constructor(
         private _userRepo : IUserRepository,
         private _passwordHash : IPasswordService

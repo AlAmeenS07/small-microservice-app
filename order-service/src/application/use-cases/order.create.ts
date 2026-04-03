@@ -3,7 +3,11 @@ import { IOrderRepository } from "../../domain/interface/Iorder.repository";
 import { UserDataService } from "../../infrastructure/services/user.service";
 
 
-export class OrderCreate{
+export interface IOrderCreate{
+    execute(userId : string , amount : number) : Promise<Order>
+}
+
+export class OrderCreate implements IOrderCreate{
     constructor(
         private _orderRepo : IOrderRepository,
         private _extUserService : UserDataService

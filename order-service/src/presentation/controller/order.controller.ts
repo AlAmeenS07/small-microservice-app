@@ -1,21 +1,18 @@
 import { Request, Response } from "express";
 import { AMOUNT_MUST_BE_GREATERTHAN_ZERO, CREATED, NOT_FOUND, ORDER_CREATED_SUCCESSFULLY, ORDER_FETCHED_SUCCESSFULLY, ORDER_NOT_FOUND_WITH_ID, SERVER_ERROR, SUCCESS, USER_NOT_FOUND } from "../../utils/constants";
-import { OrderCreate } from "../../application/use-cases/order.create";
-import { OrderRepository } from "../../infrastructure/repository/order.repository";
-import { UserDataService } from "../../infrastructure/services/user.service";
-import { OrderById } from "../../application/use-cases/order.by.id";
-import { AllOrdersOfUser } from "../../application/use-cases/orders.of.user";
+import { IOrderCreate } from "../../application/use-cases/order.create";
+import { IOrderById } from "../../application/use-cases/order.by.id";
+import { IAllOrdersOfUsers } from "../../application/use-cases/orders.of.user";
 import logger from "../../config/logger";
 
 
-const orderRepo = new OrderRepository()
-const extUserService = new UserDataService()
-
-const orderCreate = new OrderCreate(orderRepo, extUserService)
-const orderById = new OrderById(orderRepo)
-const ordersByUserId = new AllOrdersOfUser(orderRepo)
-
 export class OrderController {
+
+    constructor(
+        private _orderById : IOrderById,
+        private _orderCreate : IOrderCreate,
+        private _allOrdersOfUser : IAllOrdersOfUsers
+    ){}
 
     async createOrder(req: Request, res: Response) {
         try {
@@ -32,7 +29,7 @@ export class OrderController {
                 throw new Error(USER_NOT_FOUND);
             }
 
-            let order = await orderCreate.execute(userId, Number(amount))
+            let order = await this._orderCreate.execute(userId, Number(amount))
 
             res.status(CREATED).json({
                 success: true,
@@ -60,7 +57,7 @@ export class OrderController {
 
             let orderId = req.params.id
 
-            let order = await orderById.execute(Number(orderId))
+            let order = await this._orderById.execute(Number(orderId))
 
             if (!order) {
                 return res.status(NOT_FOUND).json({
@@ -99,7 +96,7 @@ export class OrderController {
                 throw new Error(USER_NOT_FOUND);
             }
 
-            let orders = await ordersByUserId.execute(userId)
+            let orders = await this._allOrdersOfUser.execute(userId)
 
             res.status(SUCCESS).json({
                 success: true,

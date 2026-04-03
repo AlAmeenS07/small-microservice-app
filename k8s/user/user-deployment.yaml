@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: alameens07/small-ms-user-service
+          ports:
+            - containerPort: 5001
+          env:
+            - name: MONGO_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: user-config
+                  key: MONGO_URI
+            - name: COOKIE_AGE
+              valueFrom:
+                configMapKeyRef:
+                  name: user-config
+                  key: COOKIE_AGE
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: user-secret
+                  key: JWT_SECRET

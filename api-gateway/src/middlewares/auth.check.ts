@@ -15,7 +15,7 @@ export function authCheck(req: Request, res: Response, next: NextFunction) {
             })
         }
 
-        let decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload
+        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload
 
         if (!decoded.userId) {
             return res.status(UNAUTHORIZED).json({

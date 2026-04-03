@@ -1,6 +1,9 @@
 import { Order } from "../../domain/entities/order.entity";
 import { IOrderRepository } from "../../domain/interface/Iorder.repository";
 
+export interface IAllOrdersOfUsers{
+    execute(userId : string) : Promise<Order[]>
+}
 
 export class AllOrdersOfUser{
     constructor(

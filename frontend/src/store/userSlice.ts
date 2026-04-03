@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "../Helper/axios.instance";
 
 
 type User = {
@@ -22,7 +22,7 @@ const initialState: InitialState = {
 export const fetchUser = createAsyncThunk("user/fetchUser", async (_, { rejectWithValue }) => {
     try {
 
-    const res = await axios.get(`http://localhost:5000/user-service/user/api/v1/user/me`, {
+    const res = await axiosInstance.get(`user-service/user/api/v1/user/me`, {
         withCredentials: true,
     })
 
